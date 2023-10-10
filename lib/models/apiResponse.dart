@@ -27,24 +27,24 @@ class ApiResponse<T> {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'message': message,
-      'data': data,
-      'error': errorCode,
+      'reasonPhrase': message,
+      'body': data,
+      'statusCode': errorCode,
     };
   }
 
   factory ApiResponse.fromMap(Map<String, dynamic> map) {
-    if (map['message'] == null) {
+    if (map['reasonPhrase'] == null) {
       return ApiResponse<T>(
         message: '',
-        data: map['data'] as T,
-        errorCode: map['error'] as String,
+        data: map['body'] as T,
+        errorCode: map['statusCode'] as String,
       );
     }
     return ApiResponse<T>(
-      message: map['message'] as String,
-      data: map['data'] as T,
-      errorCode: map['error'] as String,
+      message: map['reasonPhrase'] as String,
+      data: map['body'] as T,
+      errorCode: map['statusCode'] as String,
     );
   }
 

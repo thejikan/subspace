@@ -11,6 +11,16 @@ class AppRoutes {
     routePath: '/home/details',
     routeSubPath: "details",
   );
+  static const favorite = RoutesBase(
+    name: "favorite",
+    routePath: '/home/favorite',
+    routeSubPath: "favorite",
+  );
+  static const noConnection = RoutesBase(
+    name: "noConnection",
+    routePath: '/home/noConnection',
+    routeSubPath: "noConnection",
+  );
   static const login = RoutesBase(
     name: "login",
     routePath: '/home/login',

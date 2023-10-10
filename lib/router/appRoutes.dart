@@ -6,7 +6,7 @@ GoRoute _homeRoutes() {
     builder: (context, state) {
       return RepositoryProvider.value(
         value: serviceLocator.getDetailsService(),
-        child: const HomeView(),
+        child: HomeView(),
       );
       // return HomeView();
     },
@@ -24,10 +24,26 @@ GoRoute _homeRoutes() {
         },
       ),
       GoRoute(
+        path: AppRoutes.favorite.routeSubPath,
+        builder: (context, state) {
+          return RepositoryProvider.value(
+            value: serviceLocator.getDetailsService(),
+            child: const FavoriteView(),
+          );
+          // return FavoriteView();
+        },
+      ),
+      GoRoute(
         path: AppRoutes.details.routeSubPath,
         builder: (context, state) {
-          DetailsTypeConfig data = state.extra as DetailsTypeConfig;
-          return DetailsView(data: data);
+          Map<String, dynamic> data = state.extra as Map<String, dynamic>;
+          return DetailsView(data: data['blog'], tab: data['tab']);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.noConnection.routeSubPath,
+        builder: (context, state) {
+          return NoConnectionView();
         },
       ),
     ],

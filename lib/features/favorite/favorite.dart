@@ -1,71 +1,42 @@
-import 'package:fk_sample/features/home/bloc/home_cubit.dart';
+import 'package:fk_sample/features/favorite/bloc/favorite_cubit.dart';
 import 'package:fk_sample/features/service/detailsService.dart';
 import 'package:fk_sample/router/appRoutesEnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
-  backgroundColor: Colors.grey[300],
-  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-  shape: const RoundedRectangleBorder(
-    borderRadius: BorderRadius.all(Radius.circular(18)),
-  ),
-);
-
-class HomeView extends StatelessWidget {
-  const HomeView({Key? key}) : super(key: key);
+class FavoriteView extends StatelessWidget {
+  const FavoriteView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<HomeViewCubit>(
-      create: (context) => HomeViewCubit(context.read<DetailsService>()),
-      child: const _HomeView(),
+    return BlocProvider<FavoriteViewCubit>(
+      create: (context) => FavoriteViewCubit(context.read<DetailsService>()),
+      child: const _FavoriteView(),
     );
   }
 }
 
-class _HomeView extends StatelessWidget {
-  const _HomeView({Key? key}) : super(key: key);
+class _FavoriteView extends StatelessWidget {
+  const _FavoriteView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            child: Text('Subspace'),
-          ),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                style: raisedButtonStyle,
-                onPressed: () {
-                  context.read<HomeViewCubit>().favouriteBlogs();
-                  context.go(AppRoutes.favorite.routePath);
-                },
-                child: Row(
-                  children: const [
-                    Icon(
-                      Icons.favorite,
-                      color: Colors.amber,
-                    ),
-                    Text('  Blogs'),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-        body: BlocConsumer<HomeViewCubit, HomeViewState>(
-            listener: (context, state) {
-              if(state.blogData.isEmpty){
-                context.go(AppRoutes.noConnection.routePath);
-              }
+          leading: GestureDetector(
+            onTap: () {
+              context.pop();
             },
-            buildWhen: (current, previous) =>
-                current.blogData != previous.blogData,
+            child: const Icon(
+              Icons.arrow_back_ios_new,
+              size: 20,
+            ),
+          ),
+          title: const Text('Favorite Blog'),
+        ),
+        body: BlocConsumer<FavoriteViewCubit, FavoriteViewState>(
+            listener: (context, state) {},
             builder: (context, state) {
               return Column(
                 children: [
@@ -90,7 +61,7 @@ class _HomeView extends StatelessWidget {
                                         AppRoutes.details.routePath,
                                         extra: {
                                           "blog": state.blogData[index],
-                                          "tab": 1,
+                                          "tab": 2,
                                         },
                                       );
                                     },
@@ -132,10 +103,7 @@ class _HomeView extends StatelessWidget {
                                                         state.blogData[index]
                                                             .title,
                                                         style: const TextStyle(
-                                                            fontSize: 20,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
+                                                            fontSize: 20),
                                                       ),
                                                     ],
                                                   ),
@@ -144,28 +112,6 @@ class _HomeView extends StatelessWidget {
                                             ],
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topRight,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(18.0),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          context
-                                              .read<HomeViewCubit>()
-                                              .addFavourite(index);
-                                        },
-                                        child: (state.blogData[index].favourite)
-                                            ? const Icon(
-                                                Icons.favorite,
-                                                color: Colors.amber,
-                                              )
-                                            : const Icon(
-                                                Icons.favorite_border,
-                                                color: Colors.black12,
-                                              ),
                                       ),
                                     ),
                                   ),

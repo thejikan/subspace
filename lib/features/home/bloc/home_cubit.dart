@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:fk_sample/features/service/detailsService.dart';
-import 'package:fk_sample/models/detailsTypeConfig.dart';
+import 'package:fk_sample/models/blogDataConfig.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'home_state.dart';
@@ -12,43 +12,26 @@ class HomeViewCubit extends Cubit<HomeViewState> {
 
   final DetailsService _detailsService;
 
-  void initialState() {
-    List<DetailsTypeConfig> data = _detailsService.productsList();
+  void initialState() async {
+    List<BlogDataConfig> data = await _detailsService.apiRequestData();
+    
     emit(state.copyWith(
-      productData: data,
-      productDataAll: data,
+      blogData: data,
+      blogAll: data,
     ));
   }
 
-  void searchButtonClicked(){
-    String searchItem = state.searchText;
-    List<DetailsTypeConfig> data = _detailsService.productsList();
-    if(searchItem.isEmpty){
-      emit(state.copyWith(
-        productData: state.productDataAll,
-      ));
-      return;
-    }
-
-    List<DetailsTypeConfig> newData = [];
-    for(var product in data){
-      if(product.title.contains(searchItem)){
-        newData.add(product);
-      }else if(product.place.contains(searchItem)){
-        newData.add(product);
-      }
-    }
+  void addFavourite(int index) {
+    List<BlogDataConfig> check = state.blogData;
+    check[index].favourite = !check[index].favourite;
 
     emit(state.copyWith(
-      productData: newData,
-    ));
-
-  }
-
-  void textChanged(String newText){
-    emit(state.copyWith(
-      searchText: newText,
+      blogAll: check,
+      blogData: check,
     ));
   }
 
+  void favouriteBlogs() {
+    _detailsService.setData(state.blogData);
+  }
 }

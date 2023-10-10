@@ -1,19 +1,19 @@
-part of 'home_cubit.dart';
+part of 'favorite_cubit.dart';
 
-class HomeViewState extends Equatable {
+class FavoriteViewState extends Equatable {
   final List<BlogDataConfig> blogData;
   final List<BlogDataConfig> blogAll;
 
-  const HomeViewState({
+  const FavoriteViewState({
     this.blogData = const [],
     this.blogAll = const [],
   });
 
-  HomeViewState copyWith({
+  FavoriteViewState copyWith({
     List<BlogDataConfig>? blogData,
     List<BlogDataConfig>? blogAll,
   }) {
-    return HomeViewState(
+    return FavoriteViewState(
       blogData: blogData ?? this.blogData,
       blogAll: blogAll ?? this.blogAll,
     );

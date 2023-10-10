@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:fk_sample/features/data/detailsProvider.dart';
+import 'package:fk_sample/models/blogDataConfig.dart';
 
 class DetailsRepository implements IDetailsRepository {
   IDetailsProvider provider;
@@ -8,30 +11,32 @@ class DetailsRepository implements IDetailsRepository {
   });
 
   @override
-  Future<void> changePassword() async {
-    // TODO: implement changePassword
-    throw UnimplementedError();
+  Future<List<BlogDataConfig>> getDetails() async {
+    List<BlogDataConfig> responseDataList = [];
+    try {
+      final apiResponse = await provider.getDetails();
+      if (apiResponse.statusCode != 200) {
+        throw Exception(apiResponse.statusCode);
+      }
+      Map<String, dynamic> responseData = json.decode(apiResponse.body);
+
+      for (var data in responseData['blogs']) {
+        BlogDataConfig blogData = BlogDataConfig(
+            title: data['title'],
+            id: data['id'],
+            imageUrl: data['image_url'],
+            favourite: false);
+        responseDataList.add(blogData);
+      }
+
+      return responseDataList;
+    } on Exception catch (e, stacktrace) {
+      return responseDataList;
+      // throw Exception();
+    }
   }
-
-  @override
-  Future<void> changeMobile() async {
-    // TODO: implement changeMobile
-    throw UnimplementedError();
-  }
-
-
-  @override
-  Future<Map<String, String>> getDetails() async {
-    Map<String, String> responseData = {};
-    throw UnimplementedError();
-
-  }
-
-
 }
 
 abstract class IDetailsRepository {
-  Future<void> changePassword();
-  Future<void> changeMobile();
-  Future<Map<String, String>> getDetails();
+  Future<List<BlogDataConfig>> getDetails();
 }
